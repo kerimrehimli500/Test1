@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Novyra - Dark Feminine Premium Journal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #08070b;
+            --bg-surface: #121017;
+            --bg-card: #18151f;
+            --gold: #d4af37;
+            --gold-light: #f3e5ab;
+            --gold-dark: #aa8c2c;
+            --text-main: #f0ecf6;
+            --text-muted: #9e95b0;
+            --border-gold: rgba(212, 175, 55, 0.25);
+            --border-hover: rgba(212, 175, 55, 0.6);
+            --danger: #d9534f;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .serif-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* WELCOME SCREEN */
+        #welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #1c1724 0%, var(--bg-deep) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            text-align: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #welcome-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .welcome-logo {
+            font-size: 3.5rem;
+            color: var(--gold);
+            letter-spacing: 6px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .welcome-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: #000;
+            font-weight: 600;
+            padding: 16px 45px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-gold:active {
+            transform: scale(0.96);
+        }
+
+        /* MAIN APP CONTAINER */
+        #app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+            border-left: 1px solid var(--border-gold);
+            border-right: 1px solid var(--border-gold);
+            background: var(--bg-surface);
+        }
+
+        /* HEADER */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-gold);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            color: var(--gold);
+            letter-spacing: 3px;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: 1px solid var(--border-gold);
+            color: var(--gold);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .icon-btn:hover {
+            background: var(--gold);
+            color: #000;
+        }
+
+        /* TOOLBAR */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: rgba(24, 21, 31, 0.8);
+            border-bottom: 1px solid var(--border-gold);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tool-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .tool-btn {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-gold);
+            color: var(--text-main);
+            padding: 6px 14px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .tool-btn.active {
+            background: var(--gold);
+            color: #000;
+            border-color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* JOURNAL WORKSPACE */
+        .workspace {
+            flex: 1;
+            position: relative;
+            overflow-y: auto;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-content {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .page-content.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* CANVAS OVERLAY FOR STYLUS/DRAWING */
+        #draw-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        #draw-canvas.active {
+            pointer-events: auto;
+            cursor: crosshair;
+        }
+
+        /* JOURNAL TEMPLATE CARD STYLES */
+        .journal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-gold);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        .journal-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .journal-subtitle {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .flex-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media(max-width: 768px) {
+            .flex-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .section-box h4 {
+            color: var(--gold-light);
+            font-size: 1rem;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        textarea, input[type="text"] {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-gold);
+            border-radius: 6px;
+            color: var(--text-main);
+            padding: 10px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: vertical;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
+        }
+
+        textarea {
+            min-height: 80px;
+        }
+
+        /* MOOD SELECTOR */
+        .mood-options {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .mood-btn {
+            flex: 1;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-gold);
+            color: var(--text-main);
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .mood-btn.selected {
+            background: var(--gold);
+            color: #000;
+            font-weight: 600;
+        }
+
+        /* PSYCHOLOGY SUPPORT & MINI GAME MODAL */
+        .support-box {
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px dashed var(--gold);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: center;
+            display: none;
+        }
+
+        .support-box.show {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        /* MINI GAME STYLES */
+        .zen-game {
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--bg-surface);
+            border-radius: 8px;
+            border: 1px solid var(--border-gold);
+            display: none;
+            text-align: center;
+        }
+
+        .zen-game.show {
+            display: block;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            max-width: 250px;
+            margin: 10px auto;
+        }
+
+        .card-tile {
+            aspect-ratio: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--border-gold);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .card-tile.flipped {
+            background: var(--gold);
+            color: #000;
+        }
+
+        /* AUDIO RECORDING SECTION */
+        .voice-recorder-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0,0,0,0.2);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-gold);
+            margin-top: 10px;
+        }
+
+        .record-btn {
+            background: #d9534f;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .record-btn.recording {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        audio {
+            width: 100%;
+            height: 36px;
+            margin-top: 8px;
+        }
+
+        /* STICKER PANEL */
+        .sticker-palette {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            border: 1px solid var(--border-gold);
+        }
+
+        .sticker-item {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .sticker-item:hover {
+            transform: scale(1.2);
+        }
+
+        .placed-sticker {
+            position: absolute;
+            font-size: 2rem;
+            cursor: move;
+            user-select: none;
+            z-index: 60;
+        }
+
+        /* BOOK RECOMMENDATIONS & READING TEXTS */
+        .book-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .book-item {
+            background: rgba(255,255,255,0.03);
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 3px solid var(--gold);
+        }
+
+        /* FOOTER NAVIGATION */
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-gold);
+        }
+
+        .page-indicator {
+            font-size: 0.95rem;
+            color: var(--gold);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .nav-btn {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-gold);
+            color: var(--text-main);
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: var(--gold);
+            color: #000;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* PEN TOOLBAR MODAL/BAR */
+        #pen-toolbar {
+            position: fixed;
+            bottom: 75px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-card);
+            border: 1px solid var(--gold);
+            padding: 8px 15px;
+            border-radius: 30px;
+            display: none;
+            gap: 12px;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+
+        #pen-toolbar.active {
+            display: flex;
+        }
+
+        .color-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .color-dot.active {
+            border-color: #fff;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- WELCOME SCREEN -->
+    <div id="welcome-screen">
+        <div class="welcome-logo serif-font">NOVYRA</div>
+        <div class="welcome-subtitle" id="txt-welcome-sub">Dark Feminine Premium Journal</div>
+        <button class="btn-gold" id="start-btn">Jurnala Daxil Ol</button>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="app-container">
+        <!-- HEADER -->
+        <header>
+            <div class="logo serif-font">NOVYRA</div>
+            <div class="header-controls">
+                <button class="icon-btn" id="lang-toggle-btn" title="Dil Dəyiş / Change Language">EN</button>
+                <button class="icon-btn" id="pen-mode-btn" title="Qələm Rejimi / Pen Mode">✏️</button>
+                <button class="icon-btn" id="clear-page-btn" title="Səhifəni Təmizlə / Clear Page">🗑️</button>
+            </div>
+        </header>
+
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+            <div class="tool-group">
+                <span id="label-total-pages">Ümumi Səhifə: 200</span>
+            </div>
+            <div class="tool-group">
+                <button class="tool-btn" id="save-data-btn">Yadda Saxla 💾</button>
+            </div>
+        </div>
+
+        <!-- WORKSPACE WITH DRAWING CANVAS -->
+        <div class="workspace" id="workspace">
+            <canvas id="draw-canvas"></canvas>
+            <div id="sticker-layer"></div>
+
+            <!-- DYNAMIC 200 PAGES GENERATED VIA JS -->
+            <div id="pages-wrapper"></div>
+        </div>
+
+        <!-- FOOTER NAVIGATION -->
+        <footer>
+            <button class="nav-btn" id="prev-btn">← Əvvəlki</button>
+            <div class="page-indicator" id="page-indicator">Səhifə 1 / 200</div>
+            <button class="nav-btn" id="next-btn">Növbəti →</button>
+        </footer>
+    </div>
+
+    <!-- PEN TOOLBAR -->
+    <div id="pen-toolbar">
+        <div class="color-dot active" style="background: #d4af37;" data-color="#d4af37"></div>
+        <div class="color-dot" style="background: #ffffff;" data-color="#ffffff"></div>
+        <div class="color-dot" style="background: #c5a059;" data-color="#c5a059"></div>
+        <div class="color-dot" style="background: #8b0000;" data-color="#8b0000"></div>
+        <button class="tool-btn" id="eraser-btn">Silgi</button>
+    </div>
+
+    <script>
+        // --- TRANSLATIONS ---
+        const translations = {
+            az: {
+                welcomeSub: "Dark Feminine Premium Rəqəmsal Jurnal",
+                startBtn: "Jurnala Daxil Ol",
+                totalPages: "Ümumi Səhifə: 200",
+                saveBtn: "Yadda Saxla 💾",
+                prev: "← Əvvəlki",
+                next: "Növbəti →",
+                page: "Səhifə",
+                // Templates
+                dailyReflect: "Gündəlik Refleksiya & Plan",
+                reflectSub: "Reflect • Grow • Become",
+                gratitude: "Minnətdar olduğum 3 şey:",
+                intention: "Günün Məqsədi:",
+                feelingQ: "Özünü bu gün necə hiss edirsən?",
+                moods: ["Pis 🌧️", "Yaxşı 🌤️", "Əla ✨", "Bilmirəm 💭"],
+                wentWell: "Bu gün nə yaxşı getdi?",
+                toImprove: "Nəyi təkmilləşdirə bilərəm?",
+                lessons: "Öyrəndiyim dərslər:",
+                futureSelf: "Gələcək mənə qeydlər:",
+                psychSupport: "Heyanətimizi unutma, hər qaranlığın ardınca işıq gəlir. Sən tək deyilsən, bu gün özünə bir fincan isti çay dəmlə və dincəl. 🤍",
+                miniGameTitle: "Kiçik Zen Yaddaş Oyunu (Fikrini dağıt)",
+                gameWin: "Təbriklər! Zəhminiz təmizləndi ✨",
+                readingTitle: "Dil Öyrənmə & Reading Mətnləri",
+                readingSub: "English Practice & Translation",
+                sampleText: "Reading: 'The Quiet Power of Elegance' - True elegance is not about being noticed, but about being remembered. Take time today to appreciate the silence and build your inner strength with grace.",
+                voiceTitle: "Speaking Practice (Səs Qeydi)",
+                recordBtn: "Danış və Yaz 🎤",
+                recordedAudio: "Səs qeydiniz:",
+                stickerTitle: "Estetik Stikerlər",
+                bookRecTitle: "Dark Feminine Kitab Tövsiyələri",
+                books: [
+                    "• 'Beyaz Leke' - Arsıı Arslan (Dark Romance)",
+                    "• 'Aşk-ı Memnu' - Halit Ziya Uşaklıgil (Klassik)",
+                    "• 'Qürur və Qərəz' - Jane Austen (Romantika)"
+                ]
+            },
+            en: {
+                welcomeSub: "Dark Feminine Premium Digital Journal",
+                startBtn: "Enter Journal",
+                totalPages: "Total Pages: 200",
+                saveBtn: "Save 💾",
+                prev: "← Previous",
+                next: "Next →",
+                page: "Page",
+                // Templates
+                dailyReflect: "Daily Reflection & Plan",
+                reflectSub: "Reflect • Grow • Become",
+                gratitude: "3 Things I Am Grateful For:",
+                intention: "Today's Intention:",
+                feelingQ: "How are you feeling today?",
+                moods: ["Bad 🌧️", "Good 🌤️", "Great ✨", "Don't know 💭"],
+                wentWell: "What went well today?",
+                toImprove: "What can I improve?",
+                lessons: "Lessons Learned:",
+                futureSelf: "Notes to my future self:",
+                psychSupport: "Remember, every dark night is followed by a beautiful dawn. You are not alone, take a deep breath and treat yourself gently today. 🤍",
+                miniGameTitle: "Mini Zen Memory Game (Clear your mind)",
+                gameWin: "Congratulations! Your mind is refreshed ✨",
+                readingTitle: "Language Learning & Reading",
+                readingSub: "English Practice & Translation",
+                sampleText: "Reading: 'The Quiet Power of Elegance' - True elegance is not about being noticed, but about being remembered. Take time today to appreciate the silence and build your inner strength with grace.",
+                voiceTitle: "Speaking Practice (Voice Note)",
+                recordBtn: "Speak & Record 🎤",
+                recordedAudio: "Your voice note:",
+                stickerTitle: "Aesthetic Stickers",
+                bookRecTitle: "Dark Feminine Book Recommendations",
+                books: [
+                    "• 'Beyaz Leke' - Arsıı Arslan (Dark Romance)",
+                    "• 'Aşk-ı Memnu' - Halit Ziya Uşaklıgil (Classic)",
+                    "• 'Pride and Prejudice' - Jane Austen (Romance)"
+                ]
+            }
+        };
+
+        let currentLang = 'az';
+        let currentPage = 0;
+        const totalPagesCount = 200; // 10 templates repeated 20 times
+
+        // --- DOM ELEMENTS ---
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const startBtn = document.getElementById('start-btn');
+        const pagesWrapper = document.getElementById('pages-wrapper');
+        const pageIndicator = document.getElementById('page-indicator');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const langToggleBtn = document.getElementById('lang-toggle-btn');
+        const saveBtn = document.getElementById('save-data-btn');
+        const clearBtn = document.getElementById('clear-page-btn');
+        const penModeBtn = document.getElementById('pen-mode-btn');
+        const penToolbar = document.getElementById('pen-toolbar');
+        const canvas = document.getElementById('draw-canvas');
+        const ctx = canvas.getContext('2d');
+        const eraserBtn = document.getElementById('eraser-btn');
+
+        // --- INITIALIZE 200 PAGES ---
+        function buildJournalPages() {
+            let html = '';
+            for (let i = 0; i < totalPagesCount; i++) {
+                let templateType = i % 10; // 10 unique templates
+                html += `<div class="page-content ${i === 0 ? 'active' : ''}" data-page="${i}" data-template="${templateType}">`;
+                html += generateTemplateHTML(templateType, i + 1);
+                html += `</div>`;
+            }
+            pagesWrapper.innerHTML = html;
+            attachPageEventListeners();
+        }
+
+        function generateTemplateHTML(type, pageNum) {
+            const t = translations[currentLang];
+            
+            if (type === 0 || type === 1 || type === 2) {
+                // Daily Reflection / Planning Pages
+                return `
+                    <div class="journal-card">
+                        <h2 class="journal-title serif-font">${t.dailyReflect}</h2>
+                        <div class="journal-subtitle">${t.reflectSub} — ${t.page} ${pageNum}</div>
+                        
+                        <div class="section-box">
+                            <h4>${t.gratitude}</h4>
+                            <textarea placeholder="1..."></textarea>
+                            <textarea placeholder="2..." style="margin-top:8px;"></textarea>
+                            <textarea placeholder="3..." style="margin-top:8px;"></textarea>
+                        </div>
+
+                        <div class="flex-row">
+                            <div class="section-box">
+                                <h4>${t.intention}</h4>
+                                <textarea placeholder="Focus..."></textarea>
+                            </div>
+                            <div class="section-box">
+                                <h4>${t.feelingQ}</h4>
+                                <div class="mood-options">
+                                    <button class="mood-btn" onclick="selectMood(this, 'bad')">${t.moods[0]}</button>
+                                    <button class="mood-btn" onclick="selectMood(this, 'good')">${t.moods[1]}</button>
+                                    <button class="mood-btn" onclick="selectMood(this, 'great')">${t.moods[2]}</button>
+                                    <button class="mood-btn" onclick="selectMood(this, 'unknown')">${t.moods[3]}</button>
+                                </div>
+                                <div class="support-box">
+                                    <p style="font-size:0.9rem; color: var(--gold-light);">${t.psychSupport}</p>
+                                </div>
+                                <div class="zen-game">
+                                    <p style="font-size:0.85rem; color: var(--gold); margin-bottom:5px;">${t.miniGameTitle}</p>
+                                    <div class="game-grid" onclick="initZenGame(event)">
+                                        <div class="card-tile" data-val="🌹">❓</div>
+                                        <div class="card-tile" data-val="✨">❓</div>
+                                        <div class="card-tile" data-val="🌹">❓</div>
+                                        <div class="card-tile" data-val="✨">❓</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex-row">
+                            <div class="section-box">
+                                <h4>${t.wentWell}</h4>
+                                <textarea></textarea>
+                            </div>
+                            <div class="section-box">
+                                <h4>${t.toImprove}</h4>
+                                <textarea></textarea>
+                            </div>
+                        </div>
+
+                        <div class="section-box">
+                            <h4>${t.lessons}</h4>
+                            <textarea></textarea>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 3 || type === 4) {
+                // Language Learning & Reading Pages
+                return `
+                    <div class="journal-card">
+                        <h2 class="journal-title serif-font">${t.readingTitle}</h2>
+                        <div class="journal-subtitle">${t.readingSub} — ${t.page} ${pageNum}</div>
+
+                        <div class="section-box">
+                            <h4>Reading Text</h4>
+                            <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-main); background: rgba(0,0,0,0.2); padding: 12px; border-radius: 6px;">
+                                ${t.sampleText}
+                            </p>
+                        </div>
+
+                        <div class="section-box">
+                            <h4>${t.voiceTitle}</h4>
+                            <div class="voice-recorder-box">
+                                <button class="record-btn" onclick="toggleRecord(this)">${t.recordBtn}</button>
+                                <span style="font-size: 0.85rem; color: var(--text-muted);" class="rec-status">00:00</span>
+                            </div>
+                            <audio controls class="audio-playback" style="display:none;"></audio>
+                        </div>
+
+                        <div class="section-box">
+                            <h4>Vocabulary Notes & Translation</h4>
+                            <textarea placeholder="Translate new words here..."></textarea>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 5 || type === 6) {
+                // Sticker & Creativity Pages
+                return `
+                    <div class="journal-card">
+                        <h2 class="journal-title serif-font">Creative Board</h2>
+                        <div class="journal-subtitle">Stickers & Vision — ${t.page} ${pageNum}</div>
+
+                        <div class="section-box">
+                            <h4>${t.stickerTitle} (Tap to add)</h4>
+                            <div class="sticker-palette">
+                                <span class="sticker-item" onclick="addSticker('🌹')">🌹</span>
+                                <span class="sticker-item" onclick="addSticker('✨')">✨</span>
+                                <span class="sticker-item" onclick="addSticker('🤍')">🤍</span>
+                                <span class="sticker-item" onclick="addSticker('👑')">👑</span>
+                                <span class="sticker-item" onclick="addSticker('🗝️')">🗝️</span>
+                                <span class="sticker-item" onclick="addSticker('🕯️')">🕯️</span>
+                                <span class="sticker-item" onclick="addSticker('🖤')">🖤</span>
+                            </div>
+                        </div>
+
+                        <div class="section-box" style="height: 250px; position: relative;">
+                            <h4>Free Vision & Notes Space</h4>
+                            <textarea style="height: 180px;" placeholder="Write your thoughts..."></textarea>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Book Recommendations & Long-term Planning
+                return `
+                    <div class="journal-card">
+                        <h2 class="journal-title serif-font">Dark Feminine Library</h2>
+                        <div class="journal-subtitle">Inspiration & Soul — ${t.page} ${pageNum}</div>
+
+                        <div class="section-box">
+                            <h4>${t.bookRecTitle}</h4>
+                            <div class="book-list">
+                                <div class="book-item">${t.books[0]}</div>
+                                <div class="book-item">${t.books[1]}</div>
+                                <div class="book-item">${t.books[2]}</div>
+                            </div>
+                        </div>
+
+                        <div class="section-box">
+                            <h4>Personal Reflection on Reading</h4>
+                            <textarea placeholder="Write your thoughts on books or goals..."></textarea>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // --- NAVIGATION & UI LOGIC ---
+        startBtn.addEventListener('click', () => {
+            welcomeScreen.classList.add('hidden');
+            resizeCanvas();
+            loadUserData();
+        });
+
+        function showPage(index) {
+            const pages = document.querySelectorAll('.page-content');
+            if (index < 0 || index >= totalPagesCount) return;
+            pages[currentPage].classList.remove('active');
+            currentPage = index;
+            pages[currentPage].classList.add('active');
+            pageIndicator.innerText = `${translations[currentLang].page} ${currentPage + 1} / ${totalPagesCount}`;
+            prevBtn.disabled = currentPage === 0;
+            nextBtn.disabled = currentPage === totalPagesCount - 1;
+            document.getElementById('workspace').scrollTop = 0;
+        }
+
+        prevBtn.addEventListener('click', () => showPage(currentPage - 1));
+        nextBtn.addEventListener('click', () => showPage(currentPage + 1));
+
+        // --- LANGUAGE SWITCHER ---
+        langToggleBtn.addEventListener('click', () => {
+            currentLang = currentLang === 'az' ? 'en' : 'az';
+            langToggleBtn.innerText = currentLang === 'az' ? 'EN' : 'AZ';
+            document.getElementById('txt-welcome-sub').innerText = translations[currentLang].welcomeSub;
+            startBtn.innerText = translations[currentLang].startBtn;
+            buildJournalPages();
+            loadUserData();
+        });
+
+        // --- MOOD & PSYCHOLOGY & GAMES ---
+        window.selectModel = function(btn, type) {} // placeholder
+        window.selectMood = function(btn, mood) {
+            const container = btn.closest('.section-box');
+            container.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+
+            const supportBox = container.querySelector('.support-box');
+            const zenGame = container.querySelector('.zen-game');
+
+            if (supportBox) supportBox.classList.remove('show');
+            if (zenGame) zenGame.classList.remove('show');
+
+            if (mood === 'bad' && supportBox) {
+                supportBox.classList.add('show');
+            } else if (mood === 'unknown' && zenGame) {
+                zenGame.classList.add('show');
+            }
+        };
+
+        // Mini Memory Game logic
+        window.initZenGame = function(e) {
+            const tile = e.target.closest('.card-tile');
+            if (!tile || tile.classList.contains('flipped')) return;
+            tile.classList.add('flipped');
+            tile.innerText = tile.getAttribute('data-val');
+            
+            const grid = tile.closest('.game-grid');
+            const flippedTiles = grid.querySelectorAll('.card-tile.flipped');
+            if (flippedTiles.length === 4) {
+                setTimeout(() => {
+                    alert(translations[currentLang].gameWin);
+                }, 300);
+            }
+        };
+
+        // --- AUDIO RECORDING SIMULATION / MEDIA RECORDER ---
+        window.toggleRecord = function(btn) {
+            const box = btn.closest('.voice-recorder-box');
+            const audioEl = box.nextElementSibling;
+            
+            if (!btn.classList.contains('recording')) {
+                btn.classList.add('recording');
+                btn.innerText = "Yazılır... (Stop)";
+                
+                // Native browser media stream recording
+                navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+                    window.mediaRecorder = new MediaRecorder(stream);
+                    window.audioChunks = [];
+                    window.mediaRecorder.ondataavailable = e => window.audioChunks.push(e.data);
+                    window.mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(window.audioChunks, { type: 'audio/webm' });
+                        audioEl.src = URL.createObjectURL(audioBlob);
+                        audioEl.style.display = 'block';
+                    };
+                    window.mediaRecorder.start();
+                }).catch(err => {
+                    // Fallback simulation if mic is blocked
+                    setTimeout(() => {
+                        btn.classList.remove('recording');
+                        btn.innerText = translations[currentLang].recordBtn;
+                        audioEl.style.display = 'block';
+                    }, 3000);
+                });
+            } else {
+                btn.classList.remove('recording');
+                btn.innerText = translations[currentLang].recordBtn;
+                if (window.mediaRecorder) window.mediaRecorder.stop();
+            }
+        };
+
+        // --- STICKER ADDING ---
+        window.addSticker = function(emoji) {
+            const activePage = document.querySelector('.page-content.active');
+            const stickerLayer = document.getElementById('sticker-layer');
+            const st = document.createElement('div');
+            st.className = 'placed-sticker';
+            st.innerText = emoji;
+            st.style.left = Math.random() * 250 + 'px';
+            st.style.top = Math.random() * 200 + 'px';
+            
+            // Make sticker draggable on mobile/desktop
+            st.onpointerdown = function(event) {
+                let shiftX = event.clientX - st.getBoundingClientRect().left;
+                let shiftY = event.clientY - st.getBoundingClientRect().top;
+                function moveAt(pageX, pageY) {
+                    st.style.left = pageX - shiftX + 'px';
+                    st.style.top = pageY - shiftY + 'px';
+                }
+                function onPointerMove(event) {
+                    moveAt(event.clientX, event.clientY);
+                }
+                document.addEventListener('pointermove', onPointerMove);
+                st.onpointerup = function() {
+                    document.removeEventListener('pointermove', onPointerMove);
+                    st.onpointerup = null;
+                };
+            };
+            activePage.appendChild(st);
+        };
+
+        // --- CANVAS DRAWING (STYLUS / PENCIL) ---
+        let isDrawing = false;
+        let penColor = '#d4af37';
+        let isEraser = false;
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        penModeBtn.addEventListener('click', () => {
+            canvas.classList.toggle('active');
+            penToolbar.classList.toggle('active');
+            penModeBtn.style.background = canvas.classList.contains('active') ? 'var(--gold)' : 'transparent';
+            penModeBtn.style.color = canvas.classList.contains('active') ? '#000' : 'var(--gold)';
+        });
+
+        document.querySelectorAll('.color-dot').forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+                dot.classList.add('active');
+                penColor = dot.getAttribute('data-color');
+                isEraser = false;
+            });
+        });
+
+        eraserBtn.addEventListener('click', () => {
+            isEraser = true;
+            document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+        });
+
+        canvas.addEventListener('pointerdown', (e) => {
+            if (!canvas.classList.contains('active')) return;
+            isDrawing = true;
+            ctx.beginPath();
+            ctx.moveTo(e.offsetX, e.offsetY);
+        });
+
+        canvas.addEventListener('pointermove', (e) => {
+            if (!isDrawing || !canvas.classList.contains('active')) return;
+            ctx.lineWidth = isEraser ? 20 : 2;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = isEraser ? '#121017' : penColor;
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+        });
+
+        canvas.addEventListener('pointerup', () => isDrawing = false);
+        canvas.addEventListener('pointerleave', () => isDrawing = false);
+
+        // --- LOCAL STORAGE PERSISTENCE ---
+        saveBtn.addEventListener('click', () => {
+            const data = {};
+            document.querySelectorAll('.page-content').forEach((p, idx) => {
+                const textareas = p.querySelectorAll('textarea');
+                const values = Array.from(textareas).map(ta => ta.value);
+                data[idx] = values;
+            });
+            localStorage.setItem('novyra_journal_data', JSON.stringify(data));
+            alert('Bütün qeydləriniz uğurla yadda saxlanıldı! 🤍');
+        });
+
+        function loadUserData() {
+            const saved = localStorage.getItem('novyra_journal_data');
+            if (!saved) return;
+            const data = JSON.parse(saved);
+            Object.keys(data).forEach(idx => {
+                const page = document.querySelector(`.page-content[data-page="${idx}"]`);
+                if (page) {
+                    const textareas = page.querySelectorAll('textarea');
+                    data[idx].forEach((val, tIdx) => {
+                        if (textareas[tIdx]) textareas[tIdx].value = val;
+                    });
+                }
+            });
+        }
+
+        clearBtn.addEventListener('click', () => {
+            if (confirm('Bu səhifədəki qeydləri təmizləmək istədiyinizə əminsiniz?')) {
+                const activePage = document.querySelector('.page-content.active');
+                activePage.querySelectorAll('textarea').forEach(ta => ta.value = '');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        });
+
+        // Run initialization
+        buildJournalPages();
+    </script>
+</body>
+</html>
